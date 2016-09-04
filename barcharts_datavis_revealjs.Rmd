@@ -84,7 +84,7 @@ data.barplot2
 
 ## Context matters
 
-- Figures are what you remember of a story
+- The same or not the same?
 
 ```{r Fig:MisleadBar3, echo=FALSE, fig.width=5, fig.height=5}
 
@@ -105,16 +105,22 @@ data.barplot3
 
 # Figures can mislead
 
-## Binary thinking
+## Storytelling
 
-- The same or not the same
-- Larger or smaller
-- What about *uncertainty*?
+- Figures are what you remember of a 'story'
 
 ```{r Fig:MisleadBar4, echo=FALSE, fig.width=4, fig.height=4}
-data.barplot1
-data.barplot3
+data.barplot1 +
+  theme(axis.line.y = element_line(), legend.position = "none", legend.key = element_blank(),
+        text=element_text(size=18), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.title = element_blank())
+data.barplot3 +
+  theme(axis.line.y = element_line(), legend.position = "none", legend.key = element_blank(),
+        text=element_text(size=18), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.title = element_blank())
 ```
+
+- What about *uncertainty*?
 
 # Another Bar Chart
 
@@ -130,10 +136,10 @@ data.barplot3
 
 ```{r Fig:WeissgerberBar, echo=FALSE, fig.width=7, fig.height=5}
 #These data are constructed based on data kindly shared by Tracy Weissgerber to reconstruct and play with different datasets which have the same mean. The original figure and the paper, along with follow-up work, can be found in this presentation in upcoming slides.
-HopItyA = c(1.1, 5, 7, 9, 10, 10, 4.6)
-HopItyC = c(4.6, 4.95, 6.2, 6.6, 15.8, 2.2, 6.4)
-HopItyD = c(4.7, 4.9, 4.3, 3.8, 9.5, 9.7, 9.9)
-HopItyB = c(7.25, NA, 5.65, 7.0, NA, NA, NA)
+HopItyA = c(1.1, 4, 7, 9, 12, 11, 4.6, 6.9, 5.5, 6.35, 7.05)
+HopItyC = c(4.6, 4.95, 6.2, 6.0, 15.8, 3.3, 5.9, NA, NA, NA, NA)
+HopItyD = c(4.2, 4.4, 3.75, 3.85, 10, 10.2, 10.4, NA, NA, NA, NA)
+HopItyB = c(9.5, NA, 3.15, 7.5, NA, NA, NA, NA, NA, NA, NA)
 
 data.c = data.frame(HopItyA, HopItyB, HopItyC, HopItyD)
 
@@ -145,7 +151,11 @@ data_bar = data %>%
             sd = sd(value)) %>%
   ungroup() %>%
   mutate(sd_min = mean - sd) %>%
-  mutate(sd_max = mean + sd)
+  mutate(sd_max = mean + sd) %>%
+  mutate(n = c(11, 3, 7, 7)) %>%
+  mutate(sem = sd/sqrt(n)) %>%
+  mutate(sem_min = mean - sem) %>%
+  mutate(sem_max = mean + sem)
 
 data.barplot4 = ggplot(data_bar, aes(x = key, y = mean)) +
   geom_bar(stat = "identity", aes(fill = key, alpha = .5)) +
@@ -195,17 +205,33 @@ data.barplot5
 
 ## SD or SEM?
 
-- Which was used (& which would you want to know)?
+- Which was used (& which do you need to know)?
 
-```{r Fig:WeissgerberBar2a, echo=FALSE, fig.width=7, fig.height=5}
-data.barplot5
+```{r Fig:WeissgerberBar2b, echo=FALSE, fig.width=5, fig.height=4}
+data.barplot5a = ggplot(data_bar, aes(x = key, y = mean)) +
+  geom_bar(stat = "identity", aes(fill = key, alpha = .5)) +
+  geom_errorbar(aes(ymin = sem_min, ymax = sem_max), width = 0.25, lwd=1) +
+  coord_cartesian(ylim=c(0,16), expand = FALSE) +
+  scale_fill_manual(values = c(colors[[6]], colors[[7]], colors[[8]], colors[[1]])) +
+  xlab("") +
+  ylab("log CFU") +
+  theme_classic() +
+  theme(axis.line.y = element_line(), legend.position = "none", legend.key = element_blank(),
+        text=element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.title = element_blank())
+
+data.barplot5 +
+  theme(axis.line.y = element_line(), legend.position = "none", legend.key = element_blank(),
+        text=element_text(size=16), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.title = element_blank())
+data.barplot5a
 ```
 
 # Raw data
 
 ## Raw data
 
-- Are they the same responses?
+- Are they the same biological responses?
 
 ```{r Fig:WeissgerberRaw, echo=FALSE, fig.width=7, fig.height=5}
 data.raw1 = ggplot(data, aes(x=key, y=value, colour=key)) +
@@ -225,7 +251,7 @@ data.raw1
 
 ## What does mean mean?
 
-- Does having the same mean imply having the same response?
+- Same mean implies the same response?
 
 ```{r Fig:WeissgerberMeanRaw, echo=FALSE, fig.width=7, fig.height=5}
 data.raw2 = ggplot(data, aes(x = key, y = value, colour = key)) +
@@ -247,7 +273,7 @@ data.raw2
 
 ## What does mean mean?
 
-- Unequal sample sizes
+- Unequal sample sizes (*cf*. barplot)
 
 ```{r Fig:WeissgerberMeanRawA, echo=FALSE, fig.width=7, fig.height=5}
 data.raw2a = ggplot(data, aes(x = key, y = value, colour = key)) +
@@ -269,7 +295,7 @@ data.raw2a
 
 ## What does mean mean?
 
-- Outliers
+- Outliers (*cf*. barplot)
 
 ```{r Fig:WeissgerberMeanRawB, echo=FALSE, fig.width=7, fig.height=5}
 data.raw2b = ggplot(data, aes(x = key, y = value, colour = key)) +
@@ -291,7 +317,7 @@ data.raw2b
 
 ## What does mean mean?
 
-- Bimodal distribution
+- Bimodal distribution (*cf*. barplot)
 
 ```{r Fig:WeissgerberMeanRawC, echo=FALSE, fig.width=7, fig.height=5}
 data.raw2c = ggplot(data, aes(x = key, y = value, colour = key)) +
@@ -313,15 +339,18 @@ data.raw2c
 
 # But stats, right?
 
-## We use figures as guides…
+## We only use figures as guides…
 
 > - "Figures tell a story, but we actually only believe the stats"
-> - `P<0.05`, *t*-test (NHST), a description if you're lucky
-> - Do the distributions support use of NHST or *t*-test (are the data Normal)?
+> - Typical paper:
+>      - `P<0.05`, *t*-test (NHST), a description if you're lucky
+> - Do the distributions support use of a *t*-test, e.g. assumptions for 2-sample *t*-test:
+>     - both populations Normal
+>     - equal standard deviations
 
 ## …we trust the P-values
 
-- Bar plots hide inappropriate assumptions
+- Bar plots can hide inappropriate assumptions
 
 <img src="images/journal.pbio.1002128.g001.PNG" width="800px" />
 
@@ -338,14 +367,41 @@ Source: [Weissgerber et al. (2015)](http://journals.plos.org/plosbiology/article
 
 # Ways forward
 
+## Your analysis?
+
+> - **What you did…**
+>     - Open package `foo`. Click. Click, drag. Click, Click. Undo. Click. Right-click. Save `results.csv`
+>     - Load into `Excel`. Click, drag. Generate graph. Right-click. Save `pretty-graph.png`
+
+## Your analysis?
+
+> - **What you said you did in the paper…**
+>     - I analysed my data in `foo` using the `bar` analysis. Results are shown in Figure 1.
+
+## How reproducible is a mouse click?
+
+<img src="images/mouseclick.png" width="800px" />
+
+## Reproducible research
+
+> - Automate (i.e. learn to program)
+> - Write code in a (very) high-level language
+> - Get some training
+> - Use version control
+> - Get a code buddy
+> - Share code and data openly
+> - Write tests
+
 ## Now what? 
 
 > - "Thanks for undermining me. Now what do I do about it?"
-> - Other data representations are available
-> - Data visualisation/statistics training courses
->     - Research Data Visualisation Workshops
->     - Data Carpentry
->     - Software Carpentry
+> - Other data representations are available ([`UseR!`](http://www.springer.com/series/6991))
+> - Data visualisation/statistics/programming training courses
+>     - [Research Data Visualisation Workshops](https://www.software.ac.uk/rdvw)
+>     - [Data Carpentry](http://www.datacarpentry.org/)
+>     - [Software Carpentry](http://software-carpentry.org/)
+
+# Other visualisations
 
 ## Anscombe's Quartet
 
@@ -479,3 +535,23 @@ data.violin2 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
 
 data.violin2
 ```
+
+# Acknowledgements
+
+## Where do ideas come from?
+
+- Christina Bergmann: "Visualization in Biology or Why #barbarplots"
+    - most of this presentation: [RDVW presentation](https://drive.google.com/drive/u/0/folders/0B7Jaz2j9AIcWbkRoYy1Ib0ZULWs)
+    - [#barbarplots](http://barbarplots.github.io/)
+- Mike Croucher: "Is Your Research Software Correct?"
+    - most of the rest of this presentation: [Presentation](http://mikecroucher.github.io/MLPM_talk/)
+- [Software Carpentry](http://software-carpentry.org/)
+- [Data Carpentry](http://www.datacarpentry.org/)
+- [Software Sustainability Institute](https://www.software.ac.uk)
+
+
+## References
+
+Anscombe, F. J. (1973). "Graphs in Statistical Analysis." American Statistician 27 (1): 17–21. pp. 17-21. [Paper](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
+
+Weissgerber, T. L. *et al.* (2015). "Beyond bar and line graphs: Time for a new data presentation paradigm." PLoS Biology, 13(4), e1002128. doi:10.1371/journal.pbio.1002128 [Paper](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128)
