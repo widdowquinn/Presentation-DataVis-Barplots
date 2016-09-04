@@ -13,3 +13,11 @@ body {
   -o-background-size: cover;
   background-size: cover;
   }
+
+.reveal h1 {
+  color: #872175;
+}
+
+.reveal code {
+  color: #569BBE;
+}

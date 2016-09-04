@@ -20,6 +20,15 @@ library(tidyr)
 colors <- c("#779977", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#CCCCCC")
 ```
 
+## Use and License
+
+Recording of this talk, taking photos, discussing the content using email, Twitter, blogs, etc. is permitted (and encouraged), 
+providing distraction to others during the presentation is minimised.
+
+These slides and source code are available on GitHub: [https://widdowquinn.github.io/Presentation-DataVis-Barplots](https://widdowquinn.github.io/Presentation-DataVis-Barplots/#/)
+
+These slides are made available under [CC-BY v4.0](https://creativecommons.org/licenses/by/4.0/)
+
 ## IMAGINE...
 
 > - YOUR FIGURES ARE AMAZING!
@@ -407,7 +416,7 @@ Source: [Weissgerber et al. (2015)](http://journals.plos.org/plosbiology/article
 
 - Four datasets: same means and standard deviations
 
-```{r Fig:AnscombeBar, echo=FALSE, fig.width=7, fig.height=5}
+```{r Fig:AnscombeBar, echo=FALSE, fig.width=7, fig.height=4}
 anscombe_summary = gather(anscombe)
   
 data_bar = anscombe_summary[45:88,] %>%
@@ -434,11 +443,13 @@ data.barplot6 = ggplot(data_bar, aes(x = key, y = mean)) +
 data.barplot6
 ```
 
+Source: [Anscombe (1973)](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
+
 ## Boxplots
 
 - Median, interquartiles, outliers
 
-```{r AnscombeBox, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r AnscombeBox, echo=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 data.box1 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
   geom_boxplot(aes(fill = key, alpha = .5)) +
   scale_y_continuous(limits = c(0, 16), expand = c(0,0)) +
@@ -453,11 +464,13 @@ data.box1 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
 data.box1
 ```
 
+`geom_boxplot()`
+
 ## Raw data
 
 - 1D scatterplots
 
-```{r AnscombeJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r AnscombeJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 data.scatter1 = ggplot(anscombe_summary[45:88,], aes(x=key, y=value, colour=key)) +
   geom_jitter(width = .2, height = 0, size = 2.5) +
   geom_point(data=data_bar, aes(x = key, y = mean), shape = 95, size = 24) +
@@ -474,11 +487,13 @@ data.scatter1 = ggplot(anscombe_summary[45:88,], aes(x=key, y=value, colour=key)
 data.scatter1
 ```
 
+`geom_jitter()`
+
 ## Box and raw data
 
 - Boxplots and jittered 1D scatterplots
 
-```{r AnscombeBoxJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r AnscombeBoxJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 data.scatter2 = ggplot(anscombe_summary[45:88,], aes(x=key, y=value, fill=key)) +
   geom_boxplot(aes(fill = key, alpha = .5)) +  
   geom_jitter(width = .2, height = 0, size = 2.5, shape=1) +
@@ -494,11 +509,13 @@ data.scatter2 = ggplot(anscombe_summary[45:88,], aes(x=key, y=value, fill=key)) 
 data.scatter2
 ```
 
+`geom_boxplot() + geom_jitter()`
+
 ## Violin plot
 
 - Data density estimate
 
-```{r AnscombeViolin, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r AnscombeViolin, echo=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 data.violin1 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
   geom_violin(aes(fill = key, alpha = .5)) +
   scale_y_continuous(limits = c(0, 16), expand = c(0,0)) +
@@ -514,11 +531,13 @@ data.violin1 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
 data.violin1
 ```
 
+`geom_violin()`
+
 ## Violin and raw data
 
 - Stacked, not jittered, data
 
-```{r AnscombeViolinJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r AnscombeViolinJitter, echo=FALSE, warning=FALSE, fig.width=7, fig.height=4}
 
 data.violin2 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
   geom_violin(aes(fill = key, alpha = .5)) +
@@ -536,6 +555,8 @@ data.violin2 = ggplot(anscombe_summary[45:88,], aes(x = key, y = value)) +
 data.violin2
 ```
 
+`geom_violin() + geom_dotplot()`
+
 # Acknowledgements
 
 ## Where do ideas come from?
@@ -552,6 +573,6 @@ data.violin2
 
 ## References
 
-Anscombe, F. J. (1973). "Graphs in Statistical Analysis." American Statistician 27 (1): 17–21. pp. 17-21. [Paper](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
+Anscombe, F. J. (1973). "Graphs in Statistical Analysis." *American Statistician* **27(1)**: 17–21. [Paper](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
 
-Weissgerber, T. L. *et al.* (2015). "Beyond bar and line graphs: Time for a new data presentation paradigm." PLoS Biology, 13(4), e1002128. doi:10.1371/journal.pbio.1002128 [Paper](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128)
+Weissgerber, T. L. *et al.* (2015). "Beyond bar and line graphs: Time for a new data presentation paradigm." *PLoS Biology*, **13(4)**, e1002128. doi:10.1371/journal.pbio.1002128 [Paper](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128)
