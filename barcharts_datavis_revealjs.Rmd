@@ -443,7 +443,7 @@ data.barplot6 = ggplot(data_bar, aes(x = key, y = mean)) +
 data.barplot6
 ```
 
-Source: [Anscombe (1973)](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
+`geom_bar()`, Source: [Anscombe (1973)](http://www.sjsu.edu/faculty/gerstman/StatPrimer/anscombe1973.pdf)
 
 ## Boxplots
 
